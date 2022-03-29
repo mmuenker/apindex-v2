@@ -47,14 +47,21 @@ class Icon:
 class ResourceManager:
 
     @staticmethod
-    def getFile(fileName):
-        return PREFIX + "/share/apindex/" + fileName
+    def getFile(fileName, withoutPrefix = False):
+        if withoutPrefix:
+            return fileName
+        else:
+            return PREFIX + "/share/apindex/" + fileName
 
     @staticmethod
-    def readFile(fileName):
-        with open(ResourceManager.getFile(fileName), "r") as file:
+    def readFile(fileName, withoutPrefix = False):
+        with open(ResourceManager.getFile(fileName, withoutPrefix), "r") as file:
             data = file.read()
         return str(data)
+
+    @staticmethod
+    def existsFile(fileName):
+        return os.path.exists(fileName)
 
     @staticmethod
     def writeFile(filePath, data):
@@ -161,6 +168,15 @@ class IndexWriter:
         dirsRead = []
         root = File(startPath)
         html = ResourceManager.readFile("index.template.html")
+
+        print("path: " + root.getPath() + "/index.html")
+
+        if ResourceManager.existsFile(root.getPath() + "/index.html"):
+            content = ResourceManager.readFile(root.getPath() + "/index.html", True)
+            if "<!-- apindex -->" not in content:
+                print("File " + root.getPath() + "/index.html" + " is not managed by apindex and any sub directories. Skip writing")
+                return
+
 
         if title is None:
             title = root.getPathFromRoot()
