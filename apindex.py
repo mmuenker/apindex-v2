@@ -55,7 +55,7 @@ class ResourceManager:
 
     @staticmethod
     def readFile(fileName, withoutPrefix = False):
-        with open(ResourceManager.getFile(fileName, withoutPrefix), "r") as file:
+        with open(ResourceManager.getFile(fileName, withoutPrefix), "r", encoding="utf-8") as file:
             data = file.read()
         return str(data)
 
@@ -65,7 +65,7 @@ class ResourceManager:
 
     @staticmethod
     def writeFile(filePath, data):
-        with open(filePath, "w") as file:
+        with open(filePath, "w", encoding="utf-8") as file:
             file.write(data)
 
     @staticmethod
